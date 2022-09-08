@@ -49,9 +49,8 @@ window.addEventListener("keydown", function(e) {
     if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1)
         e.preventDefault();
 }, false);
-    
-window.onfullscreenchange = function(e) {
-    console.log("fullscreen event");
+
+var onfullscreenchange = function(e) {
     if (document.fullscreenElement) {
         console.log("Fullscreen");
         canvas.style.visibility = 'visible';
@@ -62,8 +61,10 @@ window.onfullscreenchange = function(e) {
         resumeButton.style.display = 'inline';
     }
 };
+    
+window.onfullscreenchange = onfullscreenchange;
 
-window.onresize = window.onfullscreenchange;
+window.onresize = onfullscreenchange;
 
 var Module = {
     arguments: ["./game.love"],
@@ -81,7 +82,11 @@ var Module = {
             drawLoadingText(text);
         } else if (Module.remainingDependencies === 0) {
             loadingCanvas.style.display = 'none';
-            goFullScreen();
+            try {
+                goFullScreen();
+            } catch (err) {
+                onfullscreenchange();
+            }
         }
     },
     totalDependencies: 0,
