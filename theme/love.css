@@ -2,6 +2,11 @@
     box-sizing: border-box;
 }
 
+html *
+{
+   font-family: 'Roboto', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif, Verdana  !important;
+}
+
 h1 {
     font-family: arial;
     color: rgb( 11, 86, 117 );
@@ -26,6 +31,20 @@ footer {
     width: 100%;
 }
 
+button {
+    font-size: 30px;
+    padding: 30px;
+    display:none;
+    border-radius: 12px;
+    text-decoration: none;
+    background-color: rgb( 233, 73, 154 );
+    /*border: none;*/
+}
+
+button:hover {
+    background-color: rgb( 252, 207, 230 );
+}
+
 /* Links */
 a {
     text-decoration: none;
@@ -43,7 +62,11 @@ a:hover {
 /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
 #canvas {
     padding-right: 0;
-    display: display;
+    display: block;
     border: 0px none;
+    visibility: hidden;
+}
+
+#loadingCanvas {
     visibility: hidden;
 }
