@@ -1,48 +1,21 @@
 var canvas = document.getElementById("canvas");
-var loadingCanvas = document.getElementById('loadingCanvas');
-var loadingContext = loadingCanvas.getContext('2d');
+var loadingText = document.getElementById('loadingText');
 var startButton = document.getElementById('play');
 var resumeButton = document.getElementById('resume');
 
-var applicationLoad = function(e) {
-    startButton.style.display = 'inline';
-}
-
-function goFullScreen() {
-    if(canvas.requestFullScreen)
-        canvas.requestFullScreen();
-    else if(canvas.webkitRequestFullScreen)
-        canvas.webkitRequestFullScreen();
-    else if(canvas.mozRequestFullScreen)
-        canvas.mozRequestFullScreen();
-    switch (screen.orientation) {
-        case "portrait-secondary":
-        case "portrait-primary":
-            screen.orientation.lock("landscape-primary");
-    }
-}
-
-function loadGame() {
-    startButton.style.display = 'none';
-    loadingCanvas.style.visibility = 'visible';
+function applicationLoad() {
+    //startButton.style.display = 'inline';
     Love(Module);
 }
 
-function drawLoadingText(text) {
-    loadingContext.fillStyle = "rgb(142, 195, 227)";
-    loadingContext.fillRect(0, 0, loadingCanvas.scrollWidth, loadingCanvas.scrollHeight);
-
-    loadingContext.font = '2em arial';
-    loadingContext.textAlign = 'center'
-    loadingContext.fillStyle = "rgb( 11, 86, 117 )";
-    loadingContext.fillText(text, loadingCanvas.scrollWidth / 2, loadingCanvas.scrollHeight / 2);
-
-    loadingContext.fillText("Powered By Emscripten.", loadingCanvas.scrollWidth / 2, loadingCanvas.scrollHeight / 4);
-    loadingContext.fillText("Powered By LÖVE.", loadingCanvas.scrollWidth / 2, loadingCanvas.scrollHeight / 4 * 3);
-}
+/*
+function loadGame() {
+    startButton.style.display = 'none';
+    Love(Module);
+}*/
 
 window.onload = function () { window.focus(); };
-//window.onclick = function () { window.focus(); };
+window.onclick = function () { window.focus(); };
     
 window.addEventListener("keydown", function(e) {
     // space and arrow keys
@@ -50,20 +23,23 @@ window.addEventListener("keydown", function(e) {
         e.preventDefault();
 }, false);
 
-var onfullscreenchange = function(e) {
+function FullScreenHook(){
+    var canvas = document.getElementById("canvas");
+    canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+}
+
+var onfullscreenchange = function() {
     if (document.fullscreenElement) {
-        console.log("Fullscreen");
-        canvas.style.visibility = 'visible';
+        //canvas.style.visibility = 'visible';
         resumeButton.style.display = 'none';
+        FullScreenHook();
     } else {
-        console.log("Pause");
-        canvas.style.visibility = 'hidden';
+        //canvas.style.visibility = 'hidden';
         resumeButton.style.display = 'inline';
     }
 };
-    
 window.onfullscreenchange = onfullscreenchange;
-
 window.onresize = onfullscreenchange;
 
 var Module = {
@@ -79,14 +55,11 @@ var Module = {
     })(),
     setStatus: function(text) {
         if (text) {
-            drawLoadingText(text);
+            loadingText.innerHTML = text;
         } else if (Module.remainingDependencies === 0) {
-            loadingCanvas.style.display = 'none';
-            try {
-                goFullScreen();
-            } catch (err) {
-                onfullscreenchange();
-            }
+            loadingText.innerHTML = '';
+            canvas.style.visibility = 'visible';
+            onfullscreenchange();
         }
     },
     totalDependencies: 0,
@@ -98,7 +71,7 @@ var Module = {
     }
 };
 
-Module.setStatus('Downloading...');
+//Module.setStatus('Downloading...');
 window.onerror = function(e) {
     // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
     Module.setStatus('Exception thrown, see JavaScript console');
