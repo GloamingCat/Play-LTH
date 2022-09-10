@@ -49,33 +49,29 @@
     <canvas id="loadingCanvas" style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;" oncontextmenu="event.preventDefault()"></canvas>
     </center>
     <script type='text/javascript'>
-	  //var ismobile=navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
       function goFullScreen(){
-            var canvas = document.getElementById("canvas");
-            if(canvas.requestFullScreen)
-                canvas.requestFullScreen();
-            else if(canvas.webkitRequestFullScreen)
-                canvas.webkitRequestFullScreen();
-            else if(canvas.mozRequestFullScreen)
-                canvas.mozRequestFullScreen();
-      }
-      function FullScreenHook(){
         var canvas = document.getElementById("canvas");
-        //canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        //canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        if (canvas.requestFullScreen)
+          canvas.requestFullScreen();
+        else if (canvas.webkitRequestFullScreen)
+          canvas.webkitRequestFullScreen();
+        else if (canvas.mozRequestFullScreen)
+          canvas.mozRequestFullScreen();
+      }
+      function FullScreenHook() {
+        var canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
       }
       var loadingContext = document.getElementById('loadingCanvas').getContext('2d');
       function drawLoadingText(text) {
         var canvas = loadingContext.canvas;
-
         loadingContext.fillStyle = "rgb(142, 195, 227)";
         loadingContext.fillRect(0, 0, canvas.width, canvas.height);
-
         loadingContext.font = '1em arial';
         loadingContext.textAlign = 'center'
         loadingContext.fillStyle = "rgb( 11, 86, 117 )";
-        loadingContext.fillText(text, canvas.width / 2, canvas.eight / 2);
-
+        loadingContext.fillText(text, canvas.width / 2, canvas.height / 2);
         loadingContext.fillText("Powered By Emscripten.", canvas.width / 2, canvas.height / 4);
         loadingContext.fillText("Powered By LÖVE.", canvas.width / 2, canvas.height / 4 * 3);
       }
